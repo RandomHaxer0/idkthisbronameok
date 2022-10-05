@@ -294,7 +294,7 @@ end
                     
                     if getgenv().Esp3 then
                         wait(0.1)
-                        if v and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                        if v and v.Character and v.Character:FindFirstChild("HumanoidRootPart") and not v.Character:FindFirstChild("ZombieScript") then
                             
                             if not v.Character:FindFirstChild("TotallyNotChamed") then
                                 Instance.new("Model", v.Character).Name = "TotallyNotChamed"
