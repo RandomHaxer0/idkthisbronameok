@@ -1,0 +1,836 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local Window = OrionLib:MakeWindow({IntroEnabled = false, Name = "Dread, Fucker Ware (placeholder name)", HidePremium = false, SaveConfig = true, ConfigFolder = "noconfigs"})
+
+if ser then
+    ser:Disconnect()
+end
+
+if ser2 then
+    ser2:Disconnect()
+end    
+
+local Player = game.Players.LocalPlayer
+local oldnamecall; oldnamecall = hookmetamethod(game, "__namecall", function(self, ...)
+    local args = {...}
+    local method = getnamecallmethod();
+ 
+    if (method == "Kick" or method == "kick") and self == Player then
+        return wait(9e9);
+    end
+ 
+    return oldnamecall(self, unpack(args))
+end)
+
+function findmelee()
+    local tool
+    
+    for i,v in pairs(game.Players.LocalPlayer:WaitForChild("Backpack"):GetChildren()) do
+        if v:IsA("Tool") and v:FindFirstChild("MeleeScript") then
+            tool = v 
+        end
+    end
+    
+    if not tool then
+            
+        for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+            if v:IsA("Tool") and v:FindFirstChild("MeleeScript") then
+                tool = v 
+            end
+        end
+    
+    end    
+    
+    if tool then
+        return tool
+    end    
+end    
+    
+    local ser = game:GetService("RunService").RenderStepped:Connect(function()
+
+    if getgenv().AntiFire then
+        if workspace:FindFirstChild("Debris") and workspace.Debris:FindFirstChild("Fire") then
+            if workspace.Debris.Fire:FindFirstChild("FireModel") then
+                workspace.Debris.Fire.FireModel:Destroy()
+            end
+        end
+    end    
+
+    if getgenv().WalkSpeed then
+        
+        if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+            game.Players.LocalPlayer.Character:FindFirstChild("Humanoid").WalkSpeed = getgenv().WalkSpeedAmmount
+        end
+        
+    end
+    
+    if getgenv().JumpPower then
+        
+        if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+            game.Players.LocalPlayer.Character:FindFirstChild("Humanoid").JumpPower = getgenv().JumpPowerAmmount
+        end
+        
+    end
+
+    if getgenv().KillAura then
+        
+        if workspace:FindFirstChild("Map") and workspace:FindFirstChild("Map"):FindFirstChildWhichIsA("Model") and workspace:FindFirstChild("Map"):FindFirstChildWhichIsA("Model"):FindFirstChild("AIZombiesStorage") then
+    
+            for i,v in pairs(workspace.Map:FindFirstChildWhichIsA("Model").AIZombiesStorage:GetChildren()) do
+                if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Head") and v:FindFirstChild("Humanoid") and v:FindFirstChild("Humanoid").Health > 0 then
+                    
+                    if (v:WaitForChild("HumanoidRootPart").Position - game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude < 20 then
+                        
+                        local ohTable1 = {
+                        	["Melee"] = findmelee(),
+                        	["HardAttack"] = true,
+                        	["AttackInOrder"] = 1
+                        }
+                        
+                        game:GetService("ReplicatedStorage").FEFunctions.Weapons.MeleeStart:FireServer(ohTable1)
+                        
+                        local ohTable1 = {
+                        	["AttackInOrder"] = 1,
+                        	["HardAttack"] = true,
+                        	["Melee"] = findmelee(),
+                        	["Hit"] = v.Head
+                        }
+                        
+                        game:GetService("ReplicatedStorage").FEFunctions.Weapons.MeleeHit:FireServer(ohTable1)
+                    
+                    end
+                    
+                end    
+            end
+        
+        end
+        
+    end  
+    
+    if getgenv().KillAura2 then
+        
+        if workspace:FindFirstChild("Map") and workspace:FindFirstChild("Map"):FindFirstChildWhichIsA("Model") then
+    
+            for i,v in pairs(game.Players:GetPlayers()) do
+                if v and v.Character and v.Character:FindFirstChild("Humanoid") and v.Character:FindFirstChild("Humanoid").Health > 0 and v.Character:FindFirstChild("ZombieScript") then
+                    
+                    if (v.Character:WaitForChild("HumanoidRootPart").Position - game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position).Magnitude < 20 then
+                        
+                        local ohTable1 = {
+                        	["Melee"] = findmelee(),
+                        	["HardAttack"] = true,
+                        	["AttackInOrder"] = 1
+                        }
+                        
+                        game:GetService("ReplicatedStorage").FEFunctions.Weapons.MeleeStart:FireServer(ohTable1)
+                        
+                        local ohTable1 = {
+                        	["AttackInOrder"] = 1,
+                        	["HardAttack"] = true,
+                        	["Melee"] = findmelee(),
+                        	["Hit"] = v.Character.Head
+                        }
+                        
+                        game:GetService("ReplicatedStorage").FEFunctions.Weapons.MeleeHit:FireServer(ohTable1)
+                    
+                    end
+                    
+                end    
+            end
+        
+        end
+        
+    end
+    
+    if getgenv().KillAura3 then
+        pcall(function()
+        for i,v in pairs(game.Players:GetPlayers()) do
+            if v and v.Character and not v.Character:FindFirstChild("ZombieScript") and game.Players.LocalPlayer.Character:FindFirstChild("ZombieScript") then
+                if (game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position - v.Character:WaitForChild("HumanoidRootPart").Position).Magnitude < 20 then
+    
+                    local ohTable1 = {
+                    	["Hit"] = v.Character.Head,
+                    	["AttackInOrder"] = 1
+                    }
+                    
+                    game:GetService("ReplicatedStorage").FEFunctions.Zombies.ZombieDamage:FireServer(ohTable1)
+                    
+                end
+            end
+        end
+        end)
+    end 
+        
+    end)  
+
+
+    
+    local ser2 = game:GetService("RunService").Heartbeat:Connect(function()
+        pcall(function()
+            for i,v in pairs(game:GetService("Workspace").Map:FindFirstChildWhichIsA("Model").AIZombiesStorage:GetChildren()) do
+                
+                if getgenv().Esp then
+                    wait(0.1)
+                    if v and v:FindFirstChild("HumanoidRootPart") then
+                        
+                        if not v:FindFirstChild("TotallyNotChamed") then
+                            Instance.new("Model", v).Name = "TotallyNotChamed"
+                            for i,v in pairs(v:GetDescendants()) do
+                                if v and v:IsA("Part") or v:IsA("MeshPart") then
+                                    local cham = Instance.new("BoxHandleAdornment",v)
+                                    cham.Name = "TotallyNotChams"
+                                    cham.Adornee = v
+                                    cham.Transparency = 0.6
+                                    cham.AlwaysOnTop = true
+                                    cham.Size = v.Size
+                                    cham.ZIndex = 1
+                                    cham.Visible = true
+                                    cham.Color3 = Color3.new(200,0,0)
+                                end    
+                            end 
+                        
+                        else
+                            v:WaitForChild("Head"):WaitForChild("TotallyNotChams").Size = v.Head.Size
+                        end    
+                    end
+                else
+                    if v and v:FindFirstChild("TotallyNotChamed") then
+                        v.TotallyNotChamed:Destroy()
+                        for i,v in pairs(v:GetDescendants()) do
+                            if v and v.Name == "TotallyNotChams" then
+                                v:Destroy()
+                            end
+                        end    
+                    end
+                end    
+                
+                if getgenv().Hitbox then
+                    v:WaitForChild("Head").Transparency = 0.8
+                    v:WaitForChild("Head").CanCollide = false
+                    v:WaitForChild("Head").Size = Vector3.new(15,15,15)
+                    v:WaitForChild("HumanoidRootPart").Size = Vector3.new(11,11,11)
+                else
+                    v:WaitForChild("Head").Transparency = 0
+                    v:WaitForChild("Head").CanCollide = true
+                    v:WaitForChild("Head").Size = Vector3.new(2,1,1)
+                    v:WaitForChild("HumanoidRootPart").Size = Vector3.new(2,2,1)
+                end    
+                
+                if getgenv().RemoveZombieOnDeath then
+                    spawn(function()
+                        if v:FindFirstChild("Humanoid") and v:FindFirstChild("Humanoid").Health > 0 then
+                            v:FindFirstChild("Humanoid").Died:Connect(function()
+                                v:Destroy()
+                            end)
+                        end    
+                    end) 
+                end    
+                
+            end
+        end)  
+        
+        pcall(function()
+            for i,v in pairs(game:GetService("Players"):GetPlayers()) do
+                
+                if v ~= game.Players.LocalPlayer and v.Character and v.Character:FindFirstChild("ZombieScript") then
+                    
+                    if getgenv().Esp2 then
+                        wait(0.1)
+                        if v and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                            
+                            if not v.Character:FindFirstChild("TotallyNotChamed") then
+                                Instance.new("Model", v.Character).Name = "TotallyNotChamed"
+                                for i,v in pairs(v.Character:GetDescendants()) do
+                                    if v and v:IsA("Part") or v:IsA("MeshPart") then
+                                        local cham = Instance.new("BoxHandleAdornment",v)
+                                        cham.Name = "TotallyNotChams"
+                                        cham.Adornee = v
+                                        cham.Transparency = 0.6
+                                        cham.AlwaysOnTop = true
+                                        cham.Size = v.Size
+                                        cham.ZIndex = 1
+                                        cham.Visible = true
+                                        cham.Color3 = Color3.new(0,145,255)
+                                    end    
+                                end 
+                            
+                            else
+                                v.Character:WaitForChild("Head"):WaitForChild("TotallyNotChams").Size = v.Character.Head.Size
+                            end    
+                        end
+                    else
+                        if v and v.Character and v.Character:FindFirstChild("TotallyNotChamed") then
+                            v.Character.TotallyNotChamed:Destroy()
+                            for i,v in pairs(v.Character:GetDescendants()) do
+                                if v and v.Name == "TotallyNotChams" then
+                                    v:Destroy()
+                                end
+                            end    
+                        end
+                    end    
+                    
+                    if getgenv().Hitbox2 then
+                        v.Character:WaitForChild("Head").Transparency = 0.8
+                        v.Character:WaitForChild("Head").CanCollide = false
+                        v.Character:WaitForChild("Head").Size = Vector3.new(15,15,15)
+                        v.Character:WaitForChild("HumanoidRootPart").Size = Vector3.new(11,11,11)
+                    else
+                        v.Character:WaitForChild("Head").Transparency = 0
+                        v.Character:WaitForChild("Head").CanCollide = true
+                        v.Character:WaitForChild("Head").Size = Vector3.new(2,1,1)
+                        v.Character:WaitForChild("HumanoidRootPart").Size = Vector3.new(2,2,1)
+                    end    
+                    
+                    if getgenv().RemoveZombieOnDeath2 then
+                        spawn(function()
+                            if v and v.Character and v.Character:FindFirstChild("Humanoid") and v.Character:FindFirstChild("Humanoid").Health > 0 then
+                                v.Character:FindFirstChild("Humanoid").Died:Connect(function()
+                                    v.Character:Destroy()
+                                end)
+                            end    
+                        end) 
+                    end
+                    
+                elseif not v.Character:FindFirstChild("ZombieScript") and v ~= game.Players.LocalPlayer then
+                    
+                    if getgenv().Esp3 then
+                        wait(0.1)
+                        if v and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                            
+                            if not v.Character:FindFirstChild("TotallyNotChamed") then
+                                Instance.new("Model", v.Character).Name = "TotallyNotChamed"
+                                for i,v in pairs(v.Character:GetDescendants()) do
+                                    if v and v:IsA("Part") or v:IsA("MeshPart") then
+                                        local cham = Instance.new("BoxHandleAdornment",v)
+                                        cham.Name = "TotallyNotChams"
+                                        cham.Adornee = v
+                                        cham.Transparency = 0.6
+                                        cham.AlwaysOnTop = true
+                                        cham.Size = v.Size
+                                        cham.ZIndex = 1
+                                        cham.Visible = true
+                                        cham.Color3 = Color3.new(247,255,0)
+                                    end    
+                                end 
+                            
+                            else
+                                if v:FindFirstChild("ZombieScript") then
+                                    if v and v.Character and v.Character:FindFirstChild("TotallyNotChamed") then
+                                        v.Character.TotallyNotChamed:Destroy()
+                                        for i,v in pairs(v.Character:GetDescendants()) do
+                                            if v and v.Name == "TotallyNotChams" then
+                                                v:Destroy()
+                                            end
+                                        end    
+                                    end
+                                else
+                                    v.Character:WaitForChild("Head"):WaitForChild("TotallyNotChams").Size = v.Character.Head.Size
+                                end
+                            end    
+                        end
+                    else
+                        if v and v.Character and v.Character:FindFirstChild("TotallyNotChamed") then
+                            v.Character.TotallyNotChamed:Destroy()
+                            for i,v in pairs(v.Character:GetDescendants()) do
+                                if v and v.Name == "TotallyNotChams" then
+                                    v:Destroy()
+                                end
+                            end    
+                        end
+                    end
+                    
+                end    
+                
+                
+            end
+        end)  
+    end)
+
+    
+
+if not stuff then
+    stuff = true
+    
+    local mt = getrawmetatable(game)
+    make_writeable(mt)
+    local namecall = mt.__namecall
+    mt.__namecall = newcclosure(function(self, ...)
+        local method = getnamecallmethod()
+        local args = {...}
+    
+        if method == "Fire" and tostring(self) == "ShootFX" or tostring(self) == "AddRecoil" then
+            if getgenv().AntiRecoil then
+                return
+            end
+        end
+        
+        if method == "Fire" and tostring(self) == "EarthquakeFX" then
+            if getgenv().AntiEarthQuake then
+                return
+            end
+        end
+        
+        if method == "FireServer" and tostring(self) == "SelfDamage" then
+            if getgenv().AntiFallDamage and args[2] == "FallDamage" then
+                return
+            end
+        end    
+        
+        return namecall(self, table.unpack(args))
+    end)
+end    
+
+function notify(text)
+    OrionLib:MakeNotification({
+    	Name = "Dread, Fucker Ware",
+    	Content = text,
+    	Image = "rbxassetid://4483345998",
+    	Time = 5
+    })
+end
+
+local CombatTab = Window:MakeTab({
+	Name = "Combat",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local ZombieTab = Window:MakeTab({
+	Name = "Zombie Stuff",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local GamemodeTab = Window:MakeTab({
+	Name = "Gamemodes",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local CharacterTab = Window:MakeTab({
+	Name = "Character",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local MiscTab = Window:MakeTab({
+	Name = "Misc.",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local CombatSection = CombatTab:AddSection({
+	Name = "Combat"
+})
+
+local ZombieSection = ZombieTab:AddSection({
+	Name = "Zombie Stuff"
+})
+
+local GamemodeSection = GamemodeTab:AddSection({
+	Name = "Gamemodes"
+})
+
+local CharacterSection = CharacterTab:AddSection({
+	Name = "Character"
+})
+
+local MiscSection = MiscTab:AddSection({
+	Name = "Misc."
+})
+
+CombatTab:AddToggle({
+	Name = "MeleeAura (NPCS)",
+	Default = false,
+	Callback = function(KA)
+		if KA then
+		    getgenv().KillAura = true
+		else
+		    getgenv().KillAura = false
+		end 
+	end    
+})
+
+CombatTab:AddToggle({
+	Name = "MeleeAura (PLAYERS)",
+	Default = false,
+	Callback = function(KA2)
+		if KA2 then
+		    getgenv().KillAura2 = true
+		else
+		    getgenv().KillAura2 = false
+		end 
+	end    
+})
+
+CombatTab:AddToggle({
+	Name = "Anti Recoil",
+	Default = false,
+	Callback = function(AR)
+        if AR then
+            getgenv().AntiRecoil = true
+        else
+            getgenv().AntiRecoil = false
+        end    
+	end    
+})
+
+CombatTab:AddToggle({
+	Name = "Hitbox Expander (NPCS)",
+	Default = false,
+	Callback = function(HBE)
+        if HBE then
+            getgenv().Hitbox = true
+        else
+            getgenv().Hitbox = false
+        end    
+	end    
+})
+
+CombatTab:AddToggle({
+	Name = "Hitbox Expander (PLAYERS)",
+	Default = false,
+	Callback = function(HBE2)
+        if HBE2 then
+            getgenv().Hitbox2 = true
+        else
+            getgenv().Hitbox2 = false
+        end    
+	end    
+})
+
+CombatTab:AddToggle({
+	Name = "ESP (NPCS)",
+	Default = false,
+	Callback = function(E)
+        if E then
+            getgenv().Esp = true
+        else
+            getgenv().Esp = false
+        end    
+	end    
+})
+
+CombatTab:AddToggle({
+	Name = "ESP (PLAYERS)",
+	Default = false,
+	Callback = function(E2)
+        if E2 then
+            getgenv().Esp2 = true
+        else
+            getgenv().Esp2 = false
+        end    
+	end    
+})
+
+ZombieTab:AddToggle({
+	Name = "Zombie Aura",
+	Default = false,
+	Callback = function(KA3)
+        if KA3 then
+            getgenv().KillAura3 = true
+        else
+            getgenv().KillAura3 = false
+        end    
+	end    
+})
+
+ZombieTab:AddToggle({
+	Name = "ESP (SURVIVORS)",
+	Default = false,
+	Callback = function(E3)
+        if E3 then
+            getgenv().Esp3 = true
+        else
+            getgenv().Esp3 = false
+        end    
+	end    
+})
+
+
+MiscTab:AddToggle({
+	Name = "Remove zombies on death (NPCS)",
+	Default = false,
+	Callback = function(RZOD)
+        if RZOD then
+            getgenv().RemoveZombieOnDeath = true
+        else
+            getgenv().RemoveZombieOnDeath = false
+        end    
+	end    
+})
+
+MiscTab:AddToggle({
+	Name = "Remove zombies on death (PLAYERS)",
+	Default = false,
+	Callback = function(RZOD2)
+        if RZOD2 then
+            getgenv().RemoveZombieOnDeath2 = true
+        else
+            getgenv().RemoveZombieOnDeath2 = false
+        end    
+	end    
+})
+
+MiscTab:AddToggle({
+	Name = "Anti Fall Damage",
+	Default = false,
+	Callback = function(AFD)
+        if AFD then
+            getgenv().AntiFallDamage = true
+        else
+            getgenv().AntiFallDamage = false
+        end    
+	end    
+})
+
+MiscTab:AddToggle({
+	Name = "Inf. Stamina",
+	Default = false,
+	Callback = function(IS)
+        if IS then
+            getgenv().InfStamina = true
+        else
+            getgenv().InfStamina = false
+        end   
+        
+        spawn(function()
+            while getgenv().InfStamina do wait(0.50)
+                pcall(function()
+                    if game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("PlayerActionScript") and getgenv().InfStamina then
+                        hookfunction(getsenv(game:GetService("Players").LocalPlayer.Character.PlayerActionScript).decreaseenergy, function() end)
+                        local func = getsenv(game.Players.LocalPlayer.Character:FindFirstChild("PlayerActionScript")).increaseenergy
+                        func()
+                    end
+                end)    
+            end
+        end)
+        
+	end    
+})
+
+MiscTab:AddBind({
+	Name = "Ammo Pickup",
+	Default = Enum.KeyCode.F,
+	Hold = false,
+	Callback = function()
+		for i,v in pairs(game:GetService("Workspace").Map:FindFirstChildWhichIsA("Model").AmmoBoxes:GetDescendants()) do
+            if v.Name == "NormalMetal" and v.Transparency == 0 then
+                firetouchinterest(game.Players.LocalPlayer.Character.Head, v, 0)
+                firetouchinterest(game.Players.LocalPlayer.Character.Head, v, 1)
+            end
+        end  
+	end    
+})
+
+MiscTab:AddButton({
+	Name = "Clear kill bricks",
+	Callback = function()
+	    
+	    if workspace:FindFirstChild("Map") and workspace:FindFirstChild("Map"):FindFirstChildWhichIsA("Model") and workspace:FindFirstChild("Others") then
+	        
+            for i,v in pairs(workspace.Map:FindFirstChildWhichIsA("Model"):GetChildren()) do
+                if v and string.find(v.Name, "Kill") then
+                    v:Destroy()
+                end
+            end
+            
+            for i,v in pairs(workspace.Others:GetChildren()) do
+                if v and string.find(v.Name, "Kill") then
+                    v:Destroy()
+                end
+            end
+            
+        end    
+        
+  	end    
+})
+
+MiscTab:AddButton({
+	Name = "Destroy barriers",
+	Callback = function()
+	    
+	    if workspace:FindFirstChild("Map") and workspace:FindFirstChild("Map"):FindFirstChildWhichIsA("Model") then
+    
+            for i,v in pairs(workspace:FindFirstChild("Map"):FindFirstChildWhichIsA("Model"):GetChildren()) do
+                if v and string.find(v.Name, "Barrier") and v:IsA("Part") or v:IsA("MeshPart") and v.Transparency == 1 and v.CanCollide then
+                    v:Destroy()
+                end
+            end
+            
+        end        
+        
+  	end    
+})
+
+MiscTab:AddButton({
+	Name = "Hide Name",
+	Callback = function()
+	    
+	    if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart"):FindFirstChild("HUDPlayer") then
+	        game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart"):FindFirstChild("HUDPlayer"):Destroy()
+        end        
+        
+  	end    
+})
+
+MiscTab:AddToggle({
+	Name = "Auto Hide Name",
+	Default = false,
+	Callback = function(AHD)
+        if AHD then
+            getgenv().AutoHideName = true
+        else
+            getgenv().AutoHideName = false
+        end   
+        
+        spawn(function()
+            while getgenv().AutoHideName do wait(0.50)
+                pcall(function()
+                    if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart"):FindFirstChild("HUDPlayer") then
+            	        game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart"):FindFirstChild("HUDPlayer"):Destroy()
+                    end 
+                end)    
+            end
+        end)
+        
+	end    
+})
+
+MiscTab:AddToggle({
+	Name = "Anti Fire",
+	Default = false,
+	Callback = function(AF)
+	    
+        if AF then
+            getgenv().AntiFire = true
+        else
+            getgenv().AntiFire = false
+        end   
+        
+	end    
+})
+
+local GamemodeSection = GamemodeTab:AddSection({
+	Name = "Arcade"
+})
+
+GamemodeTab:AddButton({
+	Name = "Collect Dices",
+	Callback = function()
+      	if game:GetService("Workspace"):FindFirstChild("Map") and game:GetService("Workspace"):FindFirstChild("Map"):FindFirstChildWhichIsA("Model") and game:GetService("Workspace"):FindFirstChild("Map"):FindFirstChildWhichIsA("Model"):FindFirstChild("ArcadeDices") then
+    
+            for i,v in pairs(game:GetService("Workspace").Map:FindFirstChildWhichIsA("Model").ArcadeDices:GetChildren()) do
+                v.Transparency = 1
+                if v:FindFirstChild("PointLight") then
+                    v.PointLight:Destroy()
+                end    
+                for a = 1,6 do
+                    if v:FindFirstChild("Decal") then
+                        v.Decal:Destroy()
+                    end 
+                end    
+                v.CFrame = CFrame.new(game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position)
+                firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 0)
+                firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 1)
+            end
+            
+        end
+  	end    
+})
+
+GamemodeTab:AddToggle({
+	Name = "Loop Collect Dices",
+	Default = false,
+	Callback = function(LCDS)
+        if LCDS then
+            getgenv().LoopCollectDices = true
+        else
+            getgenv().LoopCollectDices = false
+        end  
+        
+        spawn(function()
+            while getgenv().LoopCollectDices do wait(0.75)
+                if game:GetService("Workspace"):FindFirstChild("Map") and game:GetService("Workspace"):FindFirstChild("Map"):FindFirstChildWhichIsA("Model") and game:GetService("Workspace"):FindFirstChild("Map"):FindFirstChildWhichIsA("Model"):FindFirstChild("ArcadeDices") then
+    
+                    for i,v in pairs(game:GetService("Workspace").Map:FindFirstChildWhichIsA("Model").ArcadeDices:GetChildren()) do
+                        v.Transparency = 1
+                        if v:FindFirstChild("PointLight") then
+                            v.PointLight:Destroy()
+                        end    
+                        for a = 1,6 do
+                            if v:FindFirstChild("Decal") then
+                                v.Decal:Destroy()
+                            end 
+                        end    
+                        v.CFrame = CFrame.new(game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").Position)
+                        firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 0)
+                        firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, v, 1)
+                    end
+                    
+                end
+            end    
+        end)    
+	end    
+})
+
+GamemodeTab:AddToggle({
+	Name = "Anti Earthquake",
+	Default = false,
+	Callback = function(AEQ)
+        if AEQ then
+            getgenv().AntiEarthQuake = true
+        else
+            getgenv().AntiEarthQuake = false
+        end  
+	end    
+})
+
+CharacterTab:AddSlider({
+	Name = "WalkSpeed Ammount",
+	Min = 8,
+	Max = 75,
+	Default = 16,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "WalkSpeed",
+	Callback = function(Ammount)
+		getgenv().WalkSpeedAmmount = Ammount
+	end    
+})
+
+CharacterTab:AddSlider({
+	Name = "JumpPower Ammount",
+	Min = 15,
+	Max = 150,
+	Default = 50,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "JumpPower",
+	Callback = function(Ammount)
+		getgenv().JumpPowerAmmount = Ammount
+	end    
+})
+
+CharacterTab:AddToggle({
+	Name = "WalkSpeed",
+	Default = false,
+	Callback = function(WS)
+        if WS then
+            getgenv().WalkSpeed = true
+        else
+            getgenv().WalkSpeed = false
+        end  
+	end    
+})
+
+CharacterTab:AddToggle({
+	Name = "JumpPower",
+	Default = false,
+	Callback = function(JP)
+        if JP then
+            getgenv().JumpPower = true
+        else
+            getgenv().JumpPower = false
+        end  
+	end    
+})
